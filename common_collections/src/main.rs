@@ -51,6 +51,9 @@ fn median(list: &Vec<i32>) -> Option<i32> {
 }
 
 fn mode(list: &Vec<i32>) -> Option<i32> {
+    if list.is_empty() {
+        return None;
+    }
     let mut hash = HashMap::new();
 
     for item in list {
@@ -66,6 +69,20 @@ fn mode(list: &Vec<i32>) -> Option<i32> {
     }
 
     Some(response.0)
+}
+
+fn pig_latin(word: &str) -> String {
+    let mut iterator = word.chars();
+    let first = if let Some(item) = iterator.next() {
+        match item.to_ascii_lowercase() {
+            'a' | 'e' | 'i' | 'o' | 'u' => 'h',
+            _ => item,
+        }
+    } else {
+        '\0'
+    };
+    let word = iterator.as_str();
+    format!("{word}-{first}ay")
 }
 
 fn main() {
@@ -107,5 +124,17 @@ mod tests {
     fn mode_test() {
         let list: Vec<i32> = vec![5, 1, 7, 2, 4, 1, 9];
         assert_eq!(mode(&list), Some(1));
+    }
+
+    #[test]
+    fn pig_latin_test() {
+        let word = "first";
+        assert_eq!(pig_latin(word), "irst-fay");
+    }
+
+    #[test]
+    fn pig_latin_test_2() {
+        let word = "apple";
+        assert_eq!(pig_latin(word), "pple-hay");
     }
 }
